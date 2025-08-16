@@ -26,7 +26,7 @@
       url = "github:lnl7/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
-            # home-manager, used for managing user configuration
+    # home-manager, used for managing user configuration
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       # The `follows` keyword in inputs is used for inheritance.
@@ -34,10 +34,10 @@
       # to avoid problems caused by different versions of nixpkgs dependencies.
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
-        nix-your-shell = {
-            url = "github:MercuryTechnologies/nix-your-shell";
-            inputs.nixpkgs.follows = "nixpkgs-darwin";
-        };
+    nix-your-shell = {
+      url = "github:MercuryTechnologies/nix-your-shell";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -45,45 +45,56 @@
   # parameters in `outputs` are defined in `inputs` and can be referenced by their names.
   # However, `self` is an exception, this special parameter points to the `outputs` itself (self-reference)
   # The `@` syntax here is used to alias the attribute set of the inputs's parameter, making it convenient to use inside the function.
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    darwin,
-    home-manager,
-    ...
-  }: let
-    # TODO replace with your own username, system and hostname
-    username = "molisiye";
-    useremail = "molisiye@live.com";
-    system = "x86_64-darwin"; # aarch64-darwin or x86_64-darwin
-    hostname = "zhm-mbp2017";
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      darwin,
+      home-manager,
+      ...
+    }:
+    let
+      # TODO replace with your own username, system and hostname
+      username = "molisiye";
+      useremail = "molisiye@live.com";
+      system = "x86_64-darwin"; # aarch64-darwin or x86_64-darwin
+      hostname = "zhm-mbp2017";
 
-    specialArgs =
-      inputs
-      // {
+      specialArgs = inputs // {
         inherit username useremail hostname;
       };
-  in {
-    darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
-      inherit system specialArgs;
-      modules = [
-        ./modules/nix-core.nix
-        ./modules/system.nix
-        ./modules/apps.nix
-        ./modules/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
-        ./modules/host-users.nix
+    in
+    {
+      # home-manager build --flake $HOME/Zero/nix-config -L
+      # home-manager switch -b backup --flake $HOME/Zero/nix-config
+      # nix run nixpkgs#home-manager -- switch -b backup --flake "${HOME}/Zero/nix-config"
+      homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
+        extraSpecialArgs = {
+          inherit inputs username useremail;
+        };
+        pkgs = inputs.nixpkgs-darwin.legacyPackages.${system};
+        modules = [ ./home ];
+      };
+      darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
+        inherit system specialArgs;
+        modules = [
+          ./modules/nix-core.nix
+          ./modules/system.nix
+          ./modules/apps.nix
+          ./modules/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
+          ./modules/host-users.nix
 
-        # home manager
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = specialArgs;
-          home-manager.users.${username} = import ./home;
-        }
-      ];
+          # home manager
+          #home-manager.darwinModules.home-manager
+          # {
+          #  home-manager.useGlobalPkgs = true;
+          # home-manager.useUserPackages = true;
+          # home-manager.extraSpecialArgs = specialArgs;
+          #  home-manager.users.${username} = import ./home;
+          # }
+        ];
+      };
+      # nix code formatter
+      formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
     };
-    # nix code formatter
-    formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
-  };
 }

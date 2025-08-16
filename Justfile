@@ -1,7 +1,9 @@
 # just is a command runner, Justfile is very similar to Makefile, but simpler.
 
 # TODO update hostname here!
-hostname := "zhm-mbp2017"
+hostname := `hostname -s`
+username := `whoami`
+backup_ext := `date +%Y%m%d-%H%M`
 
 # List all the just commands
 default:
@@ -32,6 +34,74 @@ darwin-debug:
     --extra-experimental-features 'nix-command flakes'
 
   sudo -E ./result/sw/bin/darwin-rebuild switch --flake .#{{hostname}} --show-trace --verbose
+
+
+############################################################################
+#
+#  nh related commands
+#
+############################################################################
+
+# Build Home configuration
+# build-home username=username hostname=hostname:
+#    @echo "Home Manager  Building: {{ username }}@{{ hostname }}"
+#    @nh home build . --configuration "{{ username }}@{{ hostname }}"
+
+# Build OS and Home configurations
+[group('nh')]
+build:
+    @just build-home
+    @just build-host
+
+# Switch OS and Home configurations
+[group('nh')]
+switch:
+    @just switch-home
+    @just switch-host
+
+# Build and Switch Home configuration
+[group('nh')]
+home:
+    @just build-home
+    @just switch-home
+
+# Build and Switch Host configuration
+[group('nh')]
+host:
+    @just build-host
+    @just switch-host
+
+# Update flake.lock
+[group('nh')]
+update:
+    @echo "flake.lock 󱄅 Updating "
+    nix flake update
+
+# Build Home configuration
+[group('nh')]
+build-home:
+    @echo "Home Manager  Building: {{ username }}@{{ hostname }}"
+    @nh home build . --configuration "{{ username }}"
+
+# Switch Home configuration
+[group('nh')]
+switch-home:
+    @echo "Home Manager  Switching: {{ username }}@{{ hostname }}"
+    @nh home switch . --configuration "{{ username }}" --backup-extension {{ backup_ext }}
+
+# Build OS configuration
+[group('nh')]
+build-host:
+      echo "nix-darwin 󰀵 Building: {{ hostname }}"; \
+      nh darwin build . --hostname "{{ hostname }}"
+
+# Switch OS configuration
+[group('nh')]
+switch-host:
+      echo "nix-darwin 󰀵 Switching: {{ hostname }}"; \
+      nh darwin switch . --hostname "{{ hostname }}"; \
+
+
 
 ############################################################################
 #

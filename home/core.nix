@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     # archives
     zip
@@ -28,12 +29,10 @@
 
     # productivity
 
-        git
     kitty
 
     fish
-    neovim
-    just # use justfile to simplify nix-darwin's commands
+    # just # use justfile to simplify nix-darwin's commands
     lsd
     bat
     starship
@@ -44,7 +43,7 @@
     btop
     thefuck
 
-        #aria2 # A lightweight multi-protocol & multi-source command-line download utility
+    #aria2 # A lightweight multi-protocol & multi-source command-line download utility
 
     # misc
     file
@@ -130,28 +129,27 @@
     # wget # Terminal HTTP client
     # wget2 # Terminal HTTP client
     # wormhole-william # Terminal file transfer
- chezmoi
- curl
- dash
- dockutil
- docutils
- fd
- gnutls
- librist
- ffmpeg
- gh
- lua
- neovim
- nginx
-        #node
-        #nvm
- prettyping
- pyenv
- ruby
- rustup
- starship
- thefuck
- websocat
+    chezmoi
+    curl
+    dash
+    dockutil
+    docutils
+    fd
+    gnutls
+    librist
+    ffmpeg
+    gh
+    lua
+    nginx
+    #node
+    #nvm
+    prettyping
+    pyenv
+    ruby
+    rustup
+    starship
+    thefuck
+    websocat
 
   ];
 
@@ -165,10 +163,14 @@
 
     # A modern replacement for ‘ls’
     # useful in bash/zsh prompt, not in nushell.
-    eza = {
+    #    eza = {
+    # enable = true;
+    # git = true;
+    # icons = "auto";
+    #  enableZshIntegration = true;
+    # };
+    lsd = {
       enable = true;
-      git = true;
-      icons = "auto";
       enableZshIntegration = true;
     };
 

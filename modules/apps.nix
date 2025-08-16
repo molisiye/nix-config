@@ -44,7 +44,7 @@
     masApps = {
       # TODO Feel free to add your favorite apps here.
 
-      Xcode = 497799835;
+      # Xcode = 497799835;
       # Wechat = 836500024;
       # QQ = 451108668;
     };
@@ -65,30 +65,31 @@
     # TODO Feel free to add your favorite apps here.
     casks = [
       # "google-chrome"
-"another-redis-desktop-manager"
-"baidunetdisk"
- "dbeaver-community"
-"docker"
- "dotnet-sdk"
- "firefox"
- "free-download-manager"
- "iina"
- "listen1"
- "macfuse"
- "microsoft-edge"
- "obsidian"
- "openmtp"
- "postman"
- "qbittorrent"
- "reqable"
- "rider"
- "snipaste"
- "squirrel"
- "tableplus"
- "telegram-desktop"
- "visual-studio-code"
- "wechatwebdevtools"
- "wezterm"
+        "mihomo-party"
+        "another-redis-desktop-manager"
+        "baidunetdisk"
+         "dbeaver-community"
+        "docker-desktop"
+         "dotnet-sdk"
+         "firefox"
+         "free-download-manager"
+         "iina"
+         "listen1"
+         "macfuse"
+         "microsoft-edge"
+         "obsidian"
+         "openmtp"
+         "postman"
+         "qbittorrent"
+         "reqable"
+         "rider"
+         "snipaste"
+         "squirrel-app"
+         "tableplus"
+         "telegram-desktop"
+         "visual-studio-code"
+         "wechatwebdevtools"
+         "wezterm"
     ];
   };
 }
