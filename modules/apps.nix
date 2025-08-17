@@ -1,4 +1,5 @@
-{ pkgs, ...}: {
+{ pkgs, ... }:
+{
 
   ##########################################################################
   #
@@ -18,9 +19,9 @@
   #
   # Related Discussion: https://discourse.nixos.org/t/darwin-again/29331
   environment.systemPackages = with pkgs; [
-        neovim
-        git
-        just
+    neovim
+    git
+    just
   ];
 
   # TODO To make this work, homebrew need to be installed manually, see https://brew.sh
@@ -31,9 +32,9 @@
     enable = true;
 
     onActivation = {
-      autoUpdate = false;
-       upgrade = true; # Upgrade outdated casks, formulae, and App Store app
-            # 'zap': uninstalls all formulae(and related files) not listed here.
+      autoUpdate = true;
+      upgrade = true; # Upgrade outdated casks, formulae, and App Store app
+      # 'zap': uninstalls all formulae(and related files) not listed here.
       cleanup = "zap";
     };
 
@@ -57,39 +58,41 @@
     # TODO Feel free to add your favorite apps here.
     brews = [
       # "aria2"  # download tool
-     "icu4c@76"
- "python@3.11"
+      "icu4c@76"
+      "python@3.11"
+      "mas"
     ];
 
     # `brew install --cask`
     # TODO Feel free to add your favorite apps here.
     casks = [
-      # "google-chrome"
-        "mihomo-party"
-        "another-redis-desktop-manager"
-        "baidunetdisk"
-         "dbeaver-community"
-        "docker-desktop"
-         "dotnet-sdk"
-         "firefox"
-         "free-download-manager"
-         "iina"
-         "listen1"
-         "macfuse"
-         "microsoft-edge"
-         "obsidian"
-         "openmtp"
-         "postman"
-         "qbittorrent"
-         "reqable"
-         "rider"
-         "snipaste"
-         "squirrel-app"
-         "tableplus"
-         "telegram-desktop"
-         "visual-studio-code"
-         "wechatwebdevtools"
-         "wezterm"
+      "mihomo-party"
+      "another-redis-desktop-manager"
+      "baidunetdisk"
+      "dbeaver-community"
+      "docker-desktop"
+      "dotnet-sdk"
+      "firefox"
+      "free-download-manager"
+      "iina"
+      "listen1"
+      "macfuse"
+      "microsoft-edge"
+      "obsidian"
+      "openmtp"
+      "postman"
+      "qbittorrent"
+      "reqable"
+      "rider"
+      "snipaste"
+      "squirrel-app"
+      "tableplus"
+      "telegram-desktop"
+      "visual-studio-code"
+      "wechatwebdevtools"
+      "wezterm"
+      "hammerspoon"
+      "the-unarchiver"
     ];
   };
 }

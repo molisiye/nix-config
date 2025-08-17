@@ -34,6 +34,10 @@
       # to avoid problems caused by different versions of nixpkgs dependencies.
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+      #inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
     nix-your-shell = {
       url = "github:MercuryTechnologies/nix-your-shell";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -51,6 +55,7 @@
       nixpkgs,
       darwin,
       home-manager,
+      nix-homebrew,
       ...
     }:
     let
@@ -84,14 +89,14 @@
           ./modules/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
           ./modules/host-users.nix
 
-          # home manager
-          #home-manager.darwinModules.home-manager
-          # {
-          #  home-manager.useGlobalPkgs = true;
-          # home-manager.useUserPackages = true;
-          # home-manager.extraSpecialArgs = specialArgs;
-          #  home-manager.users.${username} = import ./home;
-          # }
+          nix-homebrew.darwinModules.nix-homebrew
+          {
+            nix-homebrew = {
+              enable = true;
+              user = username;
+              autoMigrate = true;
+            };
+          }
         ];
       };
       # nix code formatter
