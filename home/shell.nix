@@ -56,6 +56,9 @@
       }
     '';
   };
+    programs.fish = {
+        enable = true;
+    };
 
   home.shellAliases = {
     # ==== Aliases ====

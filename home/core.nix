@@ -6,6 +6,9 @@
     xz
     p7zip
 
+    # ai
+    gemini-cli
+
     # utils
     ripgrep # recursively searches directories for a regex pattern
     jq # A lightweight and flexible command-line JSON processor
@@ -172,11 +175,11 @@
       enable = true;
       enableZshIntegration = true;
     };
-        z-lua = {
-            enable = true;
-            enableZshIntegration = true;
-            enableAliases = true;
-        };
+    z-lua = {
+      enable = true;
+      enableZshIntegration = true;
+      enableAliases = true;
+    };
 
     # terminal file manager
     yazi = {
