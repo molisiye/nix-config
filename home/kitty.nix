@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   programs.kitty = {
@@ -35,30 +35,8 @@
       term = "xterm-256color";
       kitty_mod = "ctrl+shift";
     };
-        keybindings = {
-    "ctrl+a>x" = "close_window";
-    "ctrl+a>]" = "next_window";
-    "ctrl+a>[" = "previous_window";
-    "ctrl+a>." = "move_window_forward";
-    "ctrl+a>," = "move_window_backward";
-    "ctrl+a>c" = "launch --cwd=last_reported --type=tab";
-    "ctrl+a>," = "set_tab_title";
-    "ctrl+equal" = "change_font_size all +2.0";
-    "ctrl+plus" = "change_font_size all +2.0";
-    "ctrl+kp_add" = "change_font_size all +2.0";
-    "ctrl+minus" = "change_font_size all -2.0";
-    "ctrl+kp_subtract" = "change_font_size all -2.0";
-    "ctrl+0" = "change_font_size all 0";
-    "f11" = "toggle_fullscreen";
-    "ctrl+a>e" = "launch --type=tab nvim ~/.config/kitty/kitty.conf";
-    "ctrl+a>r" = "combine : load_config_file : launch --type=overlay --hold --allow-remote-control kitty @ send-text \"kitty config reloaded\"";
-    "ctrl+a>d" = "debug_config";
-    "ctrl+a>space" = "kitten hints --alphabet asdfqwerzxcvjklmiuopghtybn1234567890 --customize-processing ${./custom-hints.py}";
-    "f3" = "kitten hints --program '*'";
-    "ctrl+a>ctrl+a" = "send_text all \\x01";
-  };
 
-        # 键盘映射
+    # 键盘映射
     keybindings = {
       "ctrl+a>x" = "close_window";
       "ctrl+a>]" = "next_window";
@@ -66,7 +44,6 @@
       "ctrl+a>." = "move_window_forward";
       "ctrl+a>," = "move_window_backward";
       "ctrl+a>c" = "launch --cwd=last_reported --type=tab";
-      "ctrl+a>," = "set_tab_title";
       "ctrl+equal" = "change_font_size all +2.0";
       "ctrl+plus" = "change_font_size all +2.0";
       "ctrl+kp_add" = "change_font_size all +2.0";
@@ -75,25 +52,17 @@
       "ctrl+0" = "change_font_size all 0";
       "f11" = "toggle_fullscreen";
       "ctrl+a>e" = "launch --type=tab nvim ~/.config/kitty/kitty.conf";
-      "ctrl+a>r" = "combine : load_config_file : launch --type=overlay --hold --allow-remote-control kitty @ send-text \"kitty config reloaded\"";
+      "ctrl+a>r" =
+        "combine : load_config_file : launch --type=overlay --hold --allow-remote-control kitty @ send-text \"kitty config reloaded\"";
       "ctrl+a>d" = "debug_config";
       "ctrl+a>space" = "kitten hints --alphabet asdfqwerzxcvjklmiuopghtybn1234567890";
       "f3" = "kitten hints --program '*'";
       "ctrl+a>ctrl+a" = "send_text all \\x01";
     };
 
-        # 额外配置（鼠标、布局、主题等）
+    # 额外配置（鼠标、布局、主题等）
     extraConfig = ''
-      # 鼠标配置
-      mouse_map left click ungrabbed no-op
-      mouse_map ctrl+left click ungrabbed mouse_handle_click selection link prompt
-      mouse_map ctrl+left press ungrabbed mouse_selection normal
-      mouse_map right press ungrabbed copy_to_clipboard
-      
-      # 标签页标题模板
-      tab_title_template "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}{index}:{'🇿' if layout_name == 'stack' and num_windows > 1 else ''}{title}"
-      
-      # 布局配置
+                  # 布局配置
       layout splits {
         split_axis = vertical
         split_size = 50
@@ -111,22 +80,22 @@
           children = [ left_bottom right_bottom ]
         }
       }
-      
-      # 会话配置
+
+            # 会话配置
       new_tab ${pkgs.fish}/bin/fish
       launch --type=tab --cwd=current ${pkgs.fish}/bin/fish
       launch --type=window --cwd=current ${pkgs.tmux}/bin/tmux
+
+
+      # 鼠标配置
+      mouse_map left click ungrabbed no-op
+      mouse_map ctrl+left click ungrabbed mouse_handle_click selection link prompt
+      mouse_map ctrl+left press ungrabbed mouse_selection normal
+      mouse_map right press ungrabbed copy_to_clipboard
     '';
+
   };
-  
-  # 确保所有依赖项可用
-  home.packages = with pkgs; [
-    kitty
-    fish
-    tmux
-    nvim
-  ];
-  
+
   # 创建启动脚本
   home.file.".local/bin/kitty-session" = {
     text = ''
