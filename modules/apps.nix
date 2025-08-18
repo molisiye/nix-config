@@ -22,6 +22,7 @@
     neovim
     git
     just
+    nix-your-shell
   ];
 
   # TODO To make this work, homebrew need to be installed manually, see https://brew.sh

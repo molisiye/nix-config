@@ -1,5 +1,20 @@
-{ ... }:
+{ pkgs, lib, ... }:
 {
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    DOTNET_ROOT = "$HOME/.dotnet";
+    GOOGLE_CLOUD_PROJECT = "snappy-thought-465607-e7";
+  };
+
+  home.sessionPath = [
+    "$HOME/bin"
+    "$HOME/.local/bin"
+    "$HOME/go/bin"
+    "$HOME/.dotnet"
+    "$HOME/.dotnet/tools"
+    "/usr/local/sbin"
+  ];
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -7,12 +22,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     initContent = ''
-      export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
-      export DOTNET_ROOT="$HOME/.dotnet"
-      export PATH="/usr/local/sbin:$PATH"
-      export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
-      export GOOGLE_CLOUD_PROJECT=snappy-thought-465607-e7
-      export HOMEBREW_NO_ENV_HINTS=1
+      nix-your-shell zsh | source /dev/stdin
 
       # proxy
       proxy () {
@@ -44,20 +54,34 @@
           which $_comps[$1] 2>&1 | head
       }
 
-      whichcomp() {
-          for cmd in "$@"; do
-              local comp_func=\''${_comps[$cmd]}
-              if [[ -z "$comp_func" ]]; then
-                echo "error: no completion found for '$cmd'" >&2
-                continue
-              fi
-              print -raC 2 -- $^fpath/\''${comp_func}(NP*$cmd*)
-            done
-      }
     '';
   };
     programs.fish = {
-        enable = true;
+      enable = true;
+      interactiveShellInit = ''
+        nix-your-shell fish | source
+
+        # 设置代理
+        function proxy
+          set -gx http_proxy "http://127.0.0.1:7890"
+          set -gx https_proxy $http_proxy
+          set -gx socks5_proxy "socks5://127.0.0.1:7890"
+          echo "HTTP Proxy on"
+        end
+
+        # 取消代理
+        function noproxy
+          set -e http_proxy
+          set -e https_proxy
+          set -e socks5_proxy
+          echo "HTTP Proxy off"
+        end
+
+        # 复制当前路径
+        function pbcopydir
+          pwd | tr -d "\r\n" | pbcopy
+        end
+      '';
     };
 
   home.shellAliases = {
@@ -68,14 +92,12 @@
     cme = "cm edit";
 
     cat = "bat";
-    ping = "prettyping --nolegend";
     #    preview="fzf --preview "bat --color \"always\" {}"";
     # 支持在 VS Code 里用 ctrl + o 来打开选择的文件
-    #export FZF_DEFAULT_OPTS="--bind="ctrl-o:execute(code {})+abort""
+    #export FZF_DEFAULT_OPTS="--bind=\"ctrl-o:execute(code {})+abort\""
     # --color dark 使用颜色方案
     # -rr 只读模式（防止误删和运行新的 shell 程序）
     # --exclude 忽略不想操作的目录
-    du = "ncdu --color dark -rr -x --exclude .git --exclude node_modules";
     help = "tldr";
 
     # Edit shortcuts for config files

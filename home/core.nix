@@ -175,6 +175,9 @@
       enable = true;
       enableZshIntegration = true;
     };
+    bat = {
+      enable = true;
+    };
     z-lua = {
       enable = true;
       enableZshIntegration = true;
