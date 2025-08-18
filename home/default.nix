@@ -1,13 +1,30 @@
-{ username, ... }:
+{ config,inputs, username, ... }:
 
 {
   # import sub modules
   imports = [
-    ./shell.nix
+        inputs.catppuccin.homeModules.catppuccin
     ./core.nix
+    ./shell.nix
+    ./kitty.nix
     ./git.nix
     ./starship.nix
   ];
+
+    # Enable the Catppuccin theme
+  catppuccin = {
+    accent = "blue";
+    flavor = "mocha";
+    bat.enable = config.programs.bat.enable;
+    bottom.enable = config.programs.bottom.enable;
+    btop.enable = config.programs.btop.enable;
+    cava.enable = config.programs.cava.enable;
+    fish.enable = config.programs.fish.enable;
+    fzf.enable = config.programs.fzf.enable;
+    starship.enable = config.programs.starship.enable;
+    yazi.enable = config.programs.yazi.enable;
+    kitty.enable = config.programs.kitty.enable;
+  };
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
