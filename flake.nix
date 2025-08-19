@@ -1,5 +1,5 @@
 {
-  description = "Nix for macOS configuration";
+  description = "molisiye's Nix for macOS configuration";
 
   ##################################################################################################################
   #
@@ -56,7 +56,7 @@
   outputs =
     inputs@{
       self,
-      nixpkgs,
+      nixpkgs-darwin,
       darwin,
       home-manager,
       nix-homebrew,
@@ -72,6 +72,12 @@
       specialArgs = inputs // {
         inherit username useremail hostname;
       };
+
+      allSystemNames = [
+        "x86_64-darwin"
+      ];
+      # Helper function to generate a set of attributes for each system
+      forAllSystems = func: (nixpkgs-darwin.lib.genAttrs allSystemNames func);
     in
     {
       # home-manager build --flake $HOME/Zero/nix-config -L
@@ -103,7 +109,31 @@
           }
         ];
       };
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs-darwin.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              bc
+              git
+              just
+              pkgs.home-manager
+              micro
+              nh
+              nixpkgs-fmt
+              nixd
+              nix-output-monitor
+              nvd
+              tree
+            ];
+          };
+        }
+      );
+
       # nix code formatter
-      formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
+      formatter.${system} = nixpkgs-darwin.legacyPackages.${system}.alejandra;
     };
 }

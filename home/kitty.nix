@@ -5,7 +5,7 @@
     enable = true;
     font = {
       name = "Iosevka Nerd Font Mono";
-      size = 14.0;
+      size = 15.0;
     };
 
     settings = {
@@ -14,8 +14,8 @@
       strip_trailing_spaces = "never";
       select_by_word_characters = "@-./_~?&=%+#";
       remember_window_size = "yes";
-      initial_window_width = "35c";
-      initial_window_height = "120c";
+      initial_window_width = "120c";
+      initial_window_height = "35c";
       enabled_layouts = "splits,stack,fat,tall,grid";
       window_resize_step_cells = 2;
       window_resize_step_lines = 2;

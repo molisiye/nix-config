@@ -24,6 +24,7 @@
     just
     nix-your-shell
   ];
+    environment.shells = [pkgs.zsh pkgs.fish];
 
   # TODO To make this work, homebrew need to be installed manually, see https://brew.sh
   #
