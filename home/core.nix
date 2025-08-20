@@ -12,6 +12,12 @@
     # language-server
     nil
 
+    # VM
+    #lima
+
+    # nix fmt
+    alejandra
+
     # utils
     ripgrep # recursively searches directories for a regex pattern
     jq # A lightweight and flexible command-line JSON processor

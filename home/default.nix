@@ -1,17 +1,23 @@
-{ config,inputs, username, ... }:
+{
+  config,
+  inputs,
+  username,
+  ...
+}:
 
 {
   # import sub modules
   imports = [
-        inputs.catppuccin.homeModules.catppuccin
+    inputs.catppuccin.homeModules.catppuccin
     ./core.nix
+    ./fonts.nix
     ./shell.nix
     ./kitty.nix
     ./git.nix
     ./starship.nix
   ];
 
-    # Enable the Catppuccin theme
+  # Enable the Catppuccin theme
   catppuccin = {
     accent = "blue";
     flavor = "mocha";
