@@ -165,6 +165,10 @@
   ];
 
   programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
     # modern vim
     neovim = {
       enable = true;
