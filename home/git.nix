@@ -3,30 +3,44 @@
   username,
   useremail,
   ...
-}: {
+}:
+{
   # `programs.git` will generate the config file: ~/.config/git/config
   # to make git use this config file, `~/.gitconfig` should not exist!
   #
   #    https://git-scm.com/docs/git-config#Documentation/git-config.txt---global
-  home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+  home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     rm -f ~/.gitconfig
   '';
 
+  # GitHub CLI tool
+  # https://cli.github.com/manual/
+  programs.gh = {
+    enable = true;
+    settings = {
+      git_protocol = "https";
+      prompt = "enabled";
+      aliases = {
+        co = "pr checkout";
+        pv = "pr view";
+      };
+    };
+    hosts = {
+      "github.com" = {
+        "users" = {
+          "molisiye" = null;
+        };
+        "user" = "molisiye";
+      };
+    };
+  };
+
   programs.git = {
     enable = true;
-    lfs.enable = true;
 
     # TODO replace with your own name & email
     userName = username;
     userEmail = useremail;
-
-    includes = [
-      {
-        # use diffrent email & name for work
-        path = "~/work/.gitconfig";
-        condition = "gitdir:~/work/";
-      }
-    ];
 
     extraConfig = {
       init.defaultBranch = "main";
