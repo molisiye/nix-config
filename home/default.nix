@@ -2,9 +2,12 @@
   config,
   inputs,
   username,
+  pkgs,
   ...
 }:
-
+let
+  inherit (pkgs.stdenv) isDarwin isLinux;
+in 
 {
   # import sub modules
   imports = [
@@ -36,7 +39,11 @@
   # paths it should manage.
   home = {
     username = username;
-    homeDirectory = "/Users/${username}";
+    homeDirectory = 
+    if isDarwin then
+        "/Users/${username}"
+        else
+            "/home/${username}";
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage

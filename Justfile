@@ -81,13 +81,13 @@ update:
 [group('nh')]
 build-home:
     @echo "Home Manager  Building: {{ username }}@{{ hostname }}"
-    @nh home build . --configuration "{{ username }}"
+    @nh home build . --configuration "{{ username }}@{{hostname}}"
 
 # Switch Home configuration
 [group('nh')]
 switch-home:
     @echo "Home Manager  Switching: {{ username }}@{{ hostname }}"
-    @nh home switch . --configuration "{{ username }}" --backup-extension {{ backup_ext }}
+    @nh home switch . --configuration "{{ username }}@{{hostname}}" --backup-extension {{ backup_ext }}
 
 # Build OS configuration
 [group('nh')]

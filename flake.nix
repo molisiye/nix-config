@@ -20,7 +20,7 @@
   # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
   # Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.
   inputs = {
-    # nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.05-darwin";
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.05";
@@ -32,7 +32,7 @@
       # The `follows` keyword in inputs is used for inheritance.
       # Here, `inputs.nixpkgs` of home-manager is kept consistent with the `inputs.nixpkgs` of the current flake,
       # to avoid problems caused by different versions of nixpkgs dependencies.
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew = {
       url = "github:zhaofengli-wip/nix-homebrew";
@@ -40,11 +40,15 @@
     };
     nix-your-shell = {
       url = "github:MercuryTechnologies/nix-your-shell";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin = {
       url = "github:catppuccin/nix";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixGL = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -56,10 +60,12 @@
   outputs =
     inputs@{
       self,
+      nixpkgs,
       nixpkgs-darwin,
       darwin,
       home-manager,
       nix-homebrew,
+      nixGL,
       ...
     }:
     let
@@ -75,6 +81,7 @@
 
       allSystemNames = [
         "x86_64-darwin"
+        "x86_64-linux"
       ];
       # Helper function to generate a set of attributes for each system
       forAllSystems = func: (nixpkgs-darwin.lib.genAttrs allSystemNames func);
@@ -83,12 +90,53 @@
       # home-manager build --flake $HOME/Zero/nix-config -L
       # home-manager switch -b backup --flake $HOME/Zero/nix-config
       # nix run nixpkgs#home-manager -- switch -b backup --flake "${HOME}/Zero/nix-config"
-      homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
-        extraSpecialArgs = {
-          inherit inputs username useremail;
+      # homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
+      #   extraSpecialArgs = {
+      #     inherit inputs username useremail;
+      #   };
+      #   pkgs = inputs.nixpkgs-darwin.legacyPackages.${system};
+      #   modules = [ ./home ];
+      # };
+      #
+      # homeConfigurations."molisiye@arch-home" = home-manager.lib.homeManagerConfiguration {
+      #   extraSpecialArgs = {
+      #     inherit inputs username useremail;
+      #   };
+      #   # pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+      #   pkgs = import nixpkgs {
+      #       system = x86_64-linux;
+      #       config.allowUnfree = true;
+      #   };
+      #   modules = [ ./home ];
+      # };
+
+      homeConfigurations =
+      let
+        system = "x86_64-linux";
+        pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
         };
-        pkgs = inputs.nixpkgs-darwin.legacyPackages.${system};
-        modules = [ ./home ];
+      in {
+          "${username}" = home-manager.lib.homeManagerConfiguration {
+                extraSpecialArgs = {
+                  inherit inputs username useremail;
+                };
+                pkgs = inputs.nixpkgs-darwin.legacyPackages.${system};
+                modules = [ ./home ];
+          };
+
+              "molisiye@arch-home" = home-manager.lib.homeManagerConfiguration {
+                  inherit pkgs; 
+                  extraSpecialArgs = { inherit inputs username useremail;};
+                # pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+                modules = [ ./home
+                    {nixGL = {
+                        packages = nixGL.packages;
+                        installScripts = ["mesa"];
+                    };}
+                ];
+              };
       };
       darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
         inherit system specialArgs;
@@ -109,6 +157,7 @@
           }
         ];
       };
+
       devShells = forAllSystems (
         system:
         let
@@ -124,7 +173,7 @@
               micro
               nh
               nixpkgs-fmt
-              nixd
+              nil
               nix-output-monitor
               nvd
               tree

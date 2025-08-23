@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{ lib,pkgs, ... }:
+let
+  inherit (pkgs.stdenv) isDarwin isLinux;
+  nixGlWrap = lib.nixGL.wrap;
+in 
 {
   home.packages = with pkgs; [
     # archives
@@ -40,8 +44,6 @@
 
     # productivity
 
-    kitty
-
     fish
     # just # use justfile to simplify nix-darwin's commands
     lsd
@@ -64,8 +66,6 @@
     yazi
     dotnet-sdk
     nh
-    m-cli
-    coreutils
     # asciicam # Terminal webcam
     # asciinema-agg # Convert asciinema to .gif
     # asciinema # Terminal recorder
@@ -143,7 +143,6 @@
     chezmoi
     curl
     dash
-    dockutil
     docutils
     fd
     gnutls
@@ -161,7 +160,13 @@
     starship
     thefuck
     websocat
+    nix-your-shell
+] ++ lib.optionals isLinux [
 
+  ] ++ lib.optionals isDarwin [
+    m-cli 
+    coreutils
+    dockutil
   ];
 
   programs = {

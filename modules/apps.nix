@@ -22,7 +22,6 @@
     neovim
     git
     just
-    nix-your-shell
   ];
     environment.shells = [pkgs.zsh pkgs.fish];
 

@@ -1,8 +1,11 @@
 { config, pkgs, ... }:
-
+let
+  inherit (pkgs.stdenv) isDarwin isLinux;
+in 
 {
   programs.kitty = {
     enable = true;
+    package = if isDarwin then pkgs.kitty else config.lib.nixGL.wrap pkgs.kitty;
     font = {
       name = "Iosevka Nerd Font Mono";
       size = 15.0;
@@ -62,31 +65,6 @@
 
     # 额外配置（鼠标、布局、主题等）
     extraConfig = ''
-                  # 布局配置
-      layout splits {
-        split_axis = vertical
-        split_size = 50
-        screen_split_axis = vertical
-        
-        top {
-          split_axis = horizontal
-          split_size = 50
-          children = [ left_top right_top ]
-        }
-        
-        bottom {
-          split_axis = horizontal
-          split_size = 50
-          children = [ left_bottom right_bottom ]
-        }
-      }
-
-            # 会话配置
-      new_tab ${pkgs.fish}/bin/fish
-      launch --type=tab --cwd=current ${pkgs.fish}/bin/fish
-      launch --type=window --cwd=current ${pkgs.tmux}/bin/tmux
-
-
       # 鼠标配置
       mouse_map left click ungrabbed no-op
       mouse_map ctrl+left click ungrabbed mouse_handle_click selection link prompt
@@ -97,11 +75,11 @@
   };
 
   # 创建启动脚本
-  home.file.".local/bin/kitty-session" = {
-    text = ''
-      #!${pkgs.bash}/bin/bash
-      ${pkgs.kitty}/bin/kitty --session ${config.xdg.configHome}/kitty/kitty.conf
-    '';
-    executable = true;
-  };
+  # home.file.".local/bin/kitty-session" = {
+  #   text = ''
+  #     #!${pkgs.bash}/bin/bash
+  #     ${pkgs.kitty}/bin/kitty --session ${config.xdg.configHome}/kitty/kitty.conf
+  #   '';
+  #   executable = true;
+  # }
 }
