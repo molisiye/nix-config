@@ -60,7 +60,6 @@
     brews = [
       # "aria2"  # download tool
       "icu4c@76"
-      "python@3.11"
       "mas"
     ];
 

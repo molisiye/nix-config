@@ -11,6 +11,7 @@ in
 {
   # import sub modules
   imports = [
+    inputs.sops-nix.homeManagerModules.sops
     inputs.catppuccin.homeModules.catppuccin
     ./core.nix
     ./fonts.nix
@@ -35,6 +36,7 @@ in
     yazi.enable = config.programs.yazi.enable;
     kitty.enable = config.programs.kitty.enable;
   };
+
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.

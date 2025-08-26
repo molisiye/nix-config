@@ -148,7 +148,12 @@ gc:
 [group('nix')]
 fmt:
   # format the nix files in this repo
-  ls **/*.nix | each { |it| nixfmt $it.name }
+  alejandra .
+
+# Check for outdated flake inputs
+[group('nix')]
+check-updates:
+  nvd diff flake.lock
 
 # Show all the auto gc roots in the nix store
 [group('nix')]

@@ -3,14 +3,8 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     DOTNET_ROOT = "$HOME/.dotnet";
+    GOOGLE_CLOUD_PROJECT = config.sops.secrets.google_cloud_project.path;
   };
-
-  home.extraProfileCommands = ''
-    # Source secrets from sops
-    if [ -f "${config.sops.secrets.google_env.path}" ]; then
-      source "${config.sops.secrets.google_env.path}"
-    fi
-  '';
 
   home.sessionPath = [
     "$HOME/bin"

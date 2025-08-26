@@ -70,18 +70,18 @@
       home-manager,
       nix-homebrew,
       nixGL,
+      sops-nix,
       ...
     }:
     let
-      # System-wide settings
+      # TODO replace with your own username, system and hostname
+      username = "molisiye";
       system = "x86_64-darwin"; # aarch64-darwin or x86_64-darwin
       hostname = "zhm-mbp2017";
 
-      # User-specific settings
-      username = "molisiye";
-
       specialArgs = inputs // {
         inherit username hostname;
+        # useremail will be managed by sops
       };
 
       allSystemNames = [
@@ -95,7 +95,6 @@
       # home-manager build --flake $HOME/Zero/nix-config -L
       # home-manager switch -b backup --flake $HOME/Zero/nix-config
       # nix run nixpkgs#home-manager -- switch -b backup --flake "${HOME}/Zero/nix-config"
-<<<<<<< HEAD
       # homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
       #   extraSpecialArgs = {
       #     inherit inputs username useremail;
@@ -117,75 +116,75 @@
       # };
 
       homeConfigurations =
-      let
-        system = "x86_64-linux";
-        pkgs = import nixpkgs {
+        let
+          system = "x86_64-linux";
+          pkgs = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
-=======
-      homeConfigurations."${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
-        extraSpecialArgs = {
-          inherit inputs username;
->>>>>>> 3bf115f (添加 sops-nix ，并使用其管理 keys)
-        };
-      in {
-          "${username}" = home-manager.lib.homeManagerConfiguration {
-                extraSpecialArgs = {
-                  inherit inputs username useremail;
-                };
-                pkgs = inputs.nixpkgs-darwin.legacyPackages.${system};
-                modules = [ ./home ];
           };
-
-              "molisiye@arch-home" = home-manager.lib.homeManagerConfiguration {
-                  inherit pkgs; 
-                  extraSpecialArgs = { inherit inputs username useremail;};
-                # pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-                modules = [ ./home
-                    {nixGL = {
-                        packages = nixGL.packages;
-                        installScripts = ["mesa"];
-                    };}
-                ];
-              };
-      };
-      darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
-        inherit system specialArgs;
-        modules = [
-          ./modules/nix-core.nix
-          ./modules/system.nix
-          ./modules/apps.nix
-          ./modules/homebrew.nix
-          ./modules/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
-          ./modules/host-users.nix
-        ];
-      };
-
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs-darwin.legacyPackages.${system};
         in
         {
-          default = pkgs.mkShell {
-            packages = with pkgs; [
-              bc
-              git
-              just
-              pkgs.home-manager
-              micro
-              nh
-              nixpkgs-fmt
-              nil
-              nix-output-monitor
-              nvd
-              tree
+          "${username}" = home-manager.lib.homeManagerConfiguration {
+            extraSpecialArgs = {
+              inherit inputs username;
+            };
+            pkgs = inputs.nixpkgs-darwin.legacyPackages.${system};
+            modules = [ ./home ];
+          };
+
+          "molisiye@arch-home" = home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            extraSpecialArgs = { inherit inputs username; };
+            # pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+            modules = [
+              ./home
+              {
+                nixGL = {
+                  packages = nixGL.packages;
+                  installScripts = [ "mesa" ];
+                };
+              }
             ];
           };
-        }
-      );
+          darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
+            inherit system specialArgs;
+            modules = [
+              sops-nix.darwinModules.sops
+              ./modules/nix-core.nix
+              ./modules/system.nix
+              ./modules/apps.nix
+              ./modules/homebrew.nix
+              ./modules/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
+              ./modules/host-users.nix
+            ];
+          };
 
-      # nix code formatter
-      formatter.${system} = nixpkgs-darwin.legacyPackages.${system}.alejandra;
+          devShells = forAllSystems (
+            system:
+            let
+              pkgs = nixpkgs-darwin.legacyPackages.${system};
+            in
+            {
+              default = pkgs.mkShell {
+                packages = with pkgs; [
+                  bc
+                  git
+                  just
+                  pkgs.home-manager
+                  micro
+                  nh
+                  nixpkgs-fmt
+                  nil
+                  nix-output-monitor
+                  nvd
+                  tree
+                ];
+              };
+            }
+          );
+
+          # nix code formatter
+          formatter.${system} = nixpkgs-darwin.legacyPackages.${system}.alejandra;
+        };
     };
 }
