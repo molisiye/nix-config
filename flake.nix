@@ -36,7 +36,7 @@
     };
     nix-homebrew = {
       url = "github:zhaofengli-wip/nix-homebrew";
-      #inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     nix-your-shell = {
       url = "github:MercuryTechnologies/nix-your-shell";
@@ -49,6 +49,10 @@
     nixGL = {
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
   };
 
@@ -69,14 +73,15 @@
       ...
     }:
     let
-      # TODO replace with your own username, system and hostname
-      username = "molisiye";
-      useremail = "molisiye@live.com";
+      # System-wide settings
       system = "x86_64-darwin"; # aarch64-darwin or x86_64-darwin
       hostname = "zhm-mbp2017";
 
+      # User-specific settings
+      username = "molisiye";
+
       specialArgs = inputs // {
-        inherit username useremail hostname;
+        inherit username hostname;
       };
 
       allSystemNames = [
@@ -90,6 +95,7 @@
       # home-manager build --flake $HOME/Zero/nix-config -L
       # home-manager switch -b backup --flake $HOME/Zero/nix-config
       # nix run nixpkgs#home-manager -- switch -b backup --flake "${HOME}/Zero/nix-config"
+<<<<<<< HEAD
       # homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
       #   extraSpecialArgs = {
       #     inherit inputs username useremail;
@@ -116,6 +122,11 @@
         pkgs = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
+=======
+      homeConfigurations."${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
+        extraSpecialArgs = {
+          inherit inputs username;
+>>>>>>> 3bf115f (添加 sops-nix ，并使用其管理 keys)
         };
       in {
           "${username}" = home-manager.lib.homeManagerConfiguration {
@@ -144,17 +155,9 @@
           ./modules/nix-core.nix
           ./modules/system.nix
           ./modules/apps.nix
+          ./modules/homebrew.nix
           ./modules/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
           ./modules/host-users.nix
-
-          nix-homebrew.darwinModules.nix-homebrew
-          {
-            nix-homebrew = {
-              enable = true;
-              user = username;
-              autoMigrate = true;
-            };
-          }
         ];
       };
 

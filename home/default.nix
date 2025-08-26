@@ -18,6 +18,7 @@ in
     ./kitty.nix
     ./git.nix
     ./starship.nix
+    ./sops.nix
   ];
 
   # Enable the Catppuccin theme

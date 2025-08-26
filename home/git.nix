@@ -1,7 +1,7 @@
 {
   lib,
+  config,
   username,
-  useremail,
   ...
 }:
 {
@@ -38,10 +38,23 @@
   programs.git = {
     enable = true;
 
-    # TODO replace with your own name & email
     userName = username;
-    userEmail = useremail;
 
+<<<<<<< HEAD
+=======
+    includes = [
+      {
+        # use diffrent email & name for work
+        path = "~/work/.gitconfig";
+        condition = "gitdir:~/work/";
+      }
+      {
+        # Include the sops-managed email configuration
+        path = config.sops.secrets.git_email_config.path;
+      }
+    ];
+
+>>>>>>> 3bf115f (添加 sops-nix ，并使用其管理 keys)
     extraConfig = {
       init.defaultBranch = "main";
       push.autoSetupRemote = true;

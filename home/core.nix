@@ -174,6 +174,23 @@ in
       enable = true;
       nix-direnv.enable = true;
     };
+    atuin = {
+      enable = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+      enableZshIntegration = true;
+      flags = [ "--disable-up-arrow" ];
+      package = pkgs.atuin;
+      settings = {
+        auto_sync = true;
+        dialect = "uk";
+        show_preview = true;
+        style = "compact";
+        sync_frequency = "1h";
+        sync_address = "https://api.atuin.sh";
+        update_check = false;
+      };
+    };
     # modern vim
     neovim = {
       enable = true;
