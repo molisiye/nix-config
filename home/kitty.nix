@@ -1,14 +1,22 @@
-{ config, pkgs, ... }:
-let
-  inherit (pkgs.stdenv) isDarwin isLinux;
-in 
 {
+  config,
+  pkgs,
+  ...
+}: let
+  inherit (pkgs.stdenv) isDarwin;
+in {
   programs.kitty = {
     enable = true;
-    package = if isDarwin then pkgs.kitty else config.lib.nixGL.wrap pkgs.kitty;
+    package =
+      if isDarwin
+      then pkgs.kitty
+      else config.lib.nixGL.wrap pkgs.kitty;
     font = {
       name = "Iosevka Nerd Font Mono";
-      size = 15.0;
+      size =
+        if isDarwin
+        then 15.0
+        else 14.0;
     };
 
     settings = {
@@ -55,8 +63,7 @@ in
       "ctrl+0" = "change_font_size all 0";
       "f11" = "toggle_fullscreen";
       "ctrl+a>e" = "launch --type=tab nvim ~/.config/kitty/kitty.conf";
-      "ctrl+a>r" =
-        "combine : load_config_file : launch --type=overlay --hold --allow-remote-control kitty @ send-text \"kitty config reloaded\"";
+      "ctrl+a>r" = "combine : load_config_file : launch --type=overlay --hold --allow-remote-control kitty @ send-text \"kitty config reloaded\"";
       "ctrl+a>d" = "debug_config";
       "ctrl+a>space" = "kitten hints --alphabet asdfqwerzxcvjklmiuopghtybn1234567890";
       "f3" = "kitten hints --program '*'";
@@ -71,7 +78,6 @@ in
       mouse_map ctrl+left press ungrabbed mouse_selection normal
       mouse_map right press ungrabbed copy_to_clipboard
     '';
-
   };
 
   # 创建启动脚本

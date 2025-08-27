@@ -4,11 +4,9 @@
   username,
   pkgs,
   ...
-}:
-let
+}: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-in 
-{
+in {
   # import sub modules
   imports = [
     inputs.sops-nix.homeManagerModules.sops
@@ -37,16 +35,14 @@ in
     kitty.enable = config.programs.kitty.enable;
   };
 
-
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
     username = username;
-    homeDirectory = 
-    if isDarwin then
-        "/Users/${username}"
-        else
-            "/home/${username}";
+    homeDirectory =
+      if isDarwin
+      then "/Users/${username}"
+      else "/home/${username}";
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage

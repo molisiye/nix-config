@@ -1,12 +1,13 @@
-{ lib, pkgs, ... }:
-let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (pkgs.stdenv) isDarwin isLinux;
   # 暂时不使用 nixGlWrap，使用的时候将如下例子加入 packages即可：(nixGlWrap calibre)
   # nixGlWrap = lib.nixGL.wrap;
-in
-{
-  home.packages =
-    with pkgs;
+in {
+  home.packages = with pkgs;
     [
       # archives
       zip
@@ -159,7 +160,6 @@ in
       nix-your-shell
     ]
     ++ lib.optionals isLinux [
-
     ]
     ++ lib.optionals isDarwin [
       m-cli
@@ -177,7 +177,7 @@ in
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableZshIntegration = true;
-      flags = [ "--disable-up-arrow" ];
+      flags = ["--disable-up-arrow"];
       package = pkgs.atuin;
       settings = {
         auto_sync = true;

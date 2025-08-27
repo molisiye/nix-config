@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-{
-
+{pkgs, ...}: {
   ##########################################################################
   #
   #  Install all apps and packages here.
@@ -23,7 +21,7 @@
     git
     just
   ];
-    environment.shells = [pkgs.zsh pkgs.fish];
+  environment.shells = [pkgs.zsh pkgs.fish];
 
   # TODO To make this work, homebrew need to be installed manually, see https://brew.sh
   #

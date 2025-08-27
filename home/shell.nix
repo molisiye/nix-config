@@ -1,5 +1,9 @@
-{ pkgs, lib, config, ... }:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   home.sessionVariables = {
     EDITOR = "nvim";
     DOTNET_ROOT = "$HOME/.dotnet";
@@ -56,33 +60,33 @@
 
     '';
   };
-    programs.fish = {
-      enable = true;
-      interactiveShellInit = ''
-        nix-your-shell fish | source
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      nix-your-shell fish | source
 
-        # 设置代理
-        function proxy
-          set -gx http_proxy "http://127.0.0.1:7890"
-          set -gx https_proxy $http_proxy
-          set -gx socks5_proxy "socks5://127.0.0.1:7890"
-          echo "HTTP Proxy on"
-        end
+      # 设置代理
+      function proxy
+        set -gx http_proxy "http://127.0.0.1:7890"
+        set -gx https_proxy $http_proxy
+        set -gx socks5_proxy "socks5://127.0.0.1:7890"
+        echo "HTTP Proxy on"
+      end
 
-        # 取消代理
-        function noproxy
-          set -e http_proxy
-          set -e https_proxy
-          set -e socks5_proxy
-          echo "HTTP Proxy off"
-        end
+      # 取消代理
+      function noproxy
+        set -e http_proxy
+        set -e https_proxy
+        set -e socks5_proxy
+        echo "HTTP Proxy off"
+      end
 
-        # 复制当前路径
-        function pbcopydir
-          pwd | tr -d "\r\n" | pbcopy
-        end
-      '';
-    };
+      # 复制当前路径
+      function pbcopydir
+        pwd | tr -d "\r\n" | pbcopy
+      end
+    '';
+  };
 
   home.shellAliases = {
     # ==== Aliases ====
