@@ -1,6 +1,7 @@
+keys:
+  - &user_molisiye age1ffha66pz97ye2n8qdzuu5x7hlep3tkmh6y8l3um5nc9kn3unuyaqaa693c
 creation_rules:
-  - path_regex: secrets/.*\.yaml$
-    encrypted_regex: ^(data|stringData)$
-    # Replace this with your age public key.
-    # You can get it by running: age-keygen -y /path/to/your/nix-secret/age.key
-    age: age1kqe6893gvd2gvu3qgjgyfhw6242lyvpqde3lyrkh667230nh2vssjemds4
+  - path_regex: secrets/[^/]+\.yaml$
+    key_groups:
+    - age:
+      - *user_molisiye
