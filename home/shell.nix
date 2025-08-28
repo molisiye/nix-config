@@ -7,7 +7,7 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     DOTNET_ROOT = "$HOME/.dotnet";
-    GOOGLE_CLOUD_PROJECT = config.sops.secrets.google_cloud_project.path;
+    GOOGLE_CLOUD_PROJECT = "$(cat ${config.sops.secrets.google_cloud_project.path})";
   };
 
   home.sessionPath = [

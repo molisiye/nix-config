@@ -1,6 +1,7 @@
 # 我的 Nix 配置
 
 本仓库的初始配置基于 [ryan4yin/nix-darwin-kickstarter](https://github.com/ryan4yin/nix-darwin-kickstarter) 模板。
+lib目录中的内容来自[wimpysworld/nix-config](https://github.com/wimpysworld/nix-config)。
 
 该仓库包含了我的个人 Nix 配置，用于管理 macOS 环境。它通过 [Nix Flakes](https://nixos.wiki/wiki/Flakes)、[nix-darwin](https://github.com/LnL7/nix-darwin) 和 [home-manager](https://github.com/nix-community/home-manager) 进行管理。
 
