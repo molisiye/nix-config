@@ -1,13 +1,19 @@
 {
   lib,
   pkgs,
+  nixGL,
   ...
-}: let
+}:
+let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  # 暂时不使用 nixGlWrap，使用的时候将如下例子加入 packages即可：(nixGlWrap calibre)
-  # nixGlWrap = lib.nixGL.wrap;
-in {
-  home.packages = with pkgs;
+in
+{
+  nixGL.packages = import nixGL { inherit pkgs; };
+  nixGL.defaultWrapper = "mesa"; # or the driver you need
+  nixGL.installScripts = [ "mesa" ];
+
+  home.packages =
+    with pkgs;
     [
       # archives
       zip
@@ -177,7 +183,7 @@ in {
       enableBashIntegration = true;
       enableFishIntegration = true;
       enableZshIntegration = true;
-      flags = ["--disable-up-arrow"];
+      flags = [ "--disable-up-arrow" ];
       package = pkgs.atuin;
       settings = {
         auto_sync = true;

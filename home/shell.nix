@@ -1,13 +1,12 @@
 {
-  pkgs,
-  lib,
   config,
   ...
-}: {
+}:
+{
   home.sessionVariables = {
     EDITOR = "nvim";
     DOTNET_ROOT = "$HOME/.dotnet";
-    GOOGLE_CLOUD_PROJECT = "$(cat ${config.sops.secrets.google_cloud_project.path})";
+    # GOOGLE_CLOUD_PROJECT = "$(cat ${config.sops.secrets.google_cloud_project.path})";
   };
 
   home.sessionPath = [
@@ -63,6 +62,7 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      set -gx GOOGLE_CLOUD_PROJECT  "$(cat ${config.sops.secrets.google_cloud_project.path})";
       nix-your-shell fish | source
 
       # 设置代理

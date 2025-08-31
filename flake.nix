@@ -52,7 +52,7 @@
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -75,58 +75,25 @@
     }:
     let
       inherit (self) outputs;
-      # TODO replace with your own username, system and hostname
-      username = "molisiye";
       system = "x86_64-darwin"; # aarch64-darwin or x86_64-darwin
       hostname = "zhm-mbp2017";
       helper = import ./lib { inherit inputs outputs nixGL; };
 
-      specialArgs = inputs // {
-        inherit username hostname;
+      # extraSpecialArgs = inputs // {
+      #   # inherit username hostname;
+      #   # useremail will be managed by sops
+      #   nixGL = nixGL;
+      # };
+      extraSpecialArgs = {
+        # inherit username hostname;
         # useremail will be managed by sops
+        nixGL = nixGL;
       };
 
-      allSystemNames = [
-        "x86_64-darwin"
-        "x86_64-linux"
-      ];
       # Helper function to generate a set of attributes for each system
-      forAllSystems = func: (nixpkgs-darwin.lib.genAttrs allSystemNames func);
+      # forAllSystems = func: (nixpkgs-darwin.lib.genAttrs allSystemNames func);
     in
     {
-      # home-manager build --flake $HOME/Zero/nix-config -L
-      # home-manager switch -b backup --flake $HOME/Zero/nix-config
-      # nix run nixpkgs#home-manager -- switch -b backup --flake "${HOME}/Zero/nix-config"
-      # homeConfigurations = let
-      #   # system = "x86_64-linux";
-      #   pkgs = import nixpkgs {
-      #     inherit system;
-      #     config.allowUnfree = true;
-      #   };
-      # in {
-      #   "${username}@${hostname}" = home-manager.lib.homeManagerConfiguration {
-      #     extraSpecialArgs = {
-      #       inherit inputs username;
-      #     };
-      #     pkgs = inputs.nixpkgs-darwin.legacyPackages.${system};
-      #     modules = [./home];
-      #   };
-      #
-      #   "molisiye@arch-home" = home-manager.lib.homeManagerConfiguration {
-      #     inherit pkgs;
-      #     extraSpecialArgs = {inherit inputs username;};
-      #     # pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-      #     modules = [
-      #       ./home
-      #       {
-      #         nixGL = {
-      #           packages = nixGL.packages;
-      #           installScripts = ["mesa"];
-      #         };
-      #       }
-      #     ];
-      #   };
-
       homeConfigurations = {
         "molisiye@zhm-mbp2017" = helper.mkHome {
           hostname = "zhm-mbp2017";
@@ -136,10 +103,11 @@
         "molisiye@arch-home" = helper.mkHome {
           hostname = "arch-home";
           username = "molisiye";
+          system = "x86_64-linux";
         };
       };
       darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
-        inherit system specialArgs;
+        inherit system extraSpecialArgs;
         modules = [
           sops-nix.darwinModules.sops
           ./darwin/nix-core.nix
@@ -151,7 +119,7 @@
         ];
       };
 
-      devShells = forAllSystems (
+      devShells = helper.forAllSystems (
         system:
         let
           pkgs = nixpkgs-darwin.legacyPackages.${system};
@@ -163,9 +131,9 @@
               git
               just
               pkgs.home-manager
-              micro
+              neovim
               nh
-              nixpkgs-fmt
+              alejandra
               nil
               nix-output-monitor
               nvd

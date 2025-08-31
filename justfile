@@ -71,12 +71,6 @@ host:
     @just build-host
     @just switch-host
 
-# Update flake.lock
-[group('nh')]
-update:
-    @echo "flake.lock 󱄅 Updating "
-    nix flake update
-
 # Build Home configuration
 [group('nh')]
 build-home:
@@ -89,19 +83,23 @@ switch-home:
     @echo "Home Manager  Switching: {{ username }}@{{ hostname }}"
     @nh home switch . --configuration "{{ username }}@{{hostname}}" --backup-extension {{ backup_ext }}
 
-# Build OS configuration
+# Build macOS configuration
 [group('nh')]
 build-host:
       echo "nix-darwin 󰀵 Building: {{ hostname }}"; \
       nh darwin build . --hostname "{{ hostname }}"
 
-# Switch OS configuration
+# Switch macOS configuration
 [group('nh')]
 switch-host:
       echo "nix-darwin 󰀵 Switching: {{ hostname }}"; \
       nh darwin switch . --hostname "{{ hostname }}"; \
 
-
+# Nix Garbage Collection
+[group('nh')]
+gc:
+    @echo "Garbage 󰩹 Collection"
+    nh clean all --keep 5
 
 ############################################################################
 #
@@ -138,7 +136,7 @@ clean:
 
 # Garbage collect all unused nix store entries
 [group('nix')]
-gc:
+ngc:
   # garbage collect all unused nix store entries(system-wide)
   sudo nix-collect-garbage --delete-older-than 7d
   # garbage collect all unused nix store entries(for the user - home-manager)

@@ -4,9 +4,6 @@
   outputs,
   ...
 }:
-let
-  inherit (inputs.nixpkgs.lib) mkIf;
-in
 {
   # Helper function for generating home-manager configs
   mkHome =
@@ -14,36 +11,22 @@ in
       hostname,
       username ? "molisiye",
       desktop ? null,
-      platform ? "x86_64-darwin",
+      system ? "x86_64-darwin",
     }:
-    # let
-    #   isISO = builtins.substring 0 4 hostname == "iso-";
-    #   isInstall = !isISO;
-    #   isLaptop = hostname != "vader" && hostname != "phasma" && hostname != "revan" && hostname != "malak" && hostname != "maul";
-    #   isLima = hostname == "blackace" || hostname == "defender" || hostname == "fighter";
-    #   isWorkstation = builtins.isString desktop;
-    # in
     inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = inputs.nixpkgs.legacyPackages.${platform};
+      pkgs = inputs.nixpkgs.legacyPackages.${system};
       extraSpecialArgs = {
         inherit
           inputs
           outputs
           desktop
           hostname
-          platform
+          system
           username
           nixGL
-          # stateVersion
-          # isInstall
-          # isLaptop
-          # isLima
-          # isISO
-          # isWorkstation
           ;
       };
       modules = [
-        inputs.sops-nix.homeManagerModules.sops
         ../home
       ];
     };
@@ -54,7 +37,7 @@ in
   #     hostname,
   #     username ? "martin",
   #     desktop ? null,
-  #     platform ? "x86_64-linux",
+  #     system ? "x86_64-linux",
   #   }:
   # let
   #   isISO = builtins.substring 0 4 hostname == "iso-";
@@ -70,7 +53,7 @@ in
   #       outputs
   #       desktop
   #       hostname
-  #       platform
+  #       system
   #       username
   #       stateVersion
   #       isInstall
@@ -97,7 +80,7 @@ in
       desktop ? "aqua",
       hostname,
       username ? "molisiye",
-      platform ? "aarch64-darwin",
+      system ? "aarch64-darwin",
     }:
     let
       isISO = false;
@@ -112,7 +95,7 @@ in
           outputs
           desktop
           hostname
-          platform
+          system
           username
           isInstall
           isISO
