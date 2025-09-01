@@ -1,22 +1,22 @@
 {
   config,
   pkgs,
+  nixGL,
   ...
-}: let
+}:
+let
   inherit (pkgs.stdenv) isDarwin;
-in {
+  nixGL.packages = import nixGL { inherit pkgs; };
+  nixGL.defaultWrapper = "mesa"; # or the driver you need
+  nixGL.installScripts = [ "mesa" ];
+in
+{
   programs.kitty = {
     enable = true;
-    package =
-      if isDarwin
-      then pkgs.kitty
-      else config.lib.nixGL.wrap pkgs.kitty;
+    package = if isDarwin then pkgs.kitty else config.lib.nixGL.wrap pkgs.kitty;
     font = {
       name = "Iosevka Nerd Font Mono";
-      size =
-        if isDarwin
-        then 15.0
-        else 14.0;
+      size = if isDarwin then 15.0 else 14.0;
     };
 
     settings = {
@@ -63,7 +63,8 @@ in {
       "ctrl+0" = "change_font_size all 0";
       "f11" = "toggle_fullscreen";
       "ctrl+a>e" = "launch --type=tab nvim ~/.config/kitty/kitty.conf";
-      "ctrl+a>r" = "combine : load_config_file : launch --type=overlay --hold --allow-remote-control kitty @ send-text \"kitty config reloaded\"";
+      "ctrl+a>r" =
+        "combine : load_config_file : launch --type=overlay --hold --allow-remote-control kitty @ send-text \"kitty config reloaded\"";
       "ctrl+a>d" = "debug_config";
       "ctrl+a>space" = "kitten hints --alphabet asdfqwerzxcvjklmiuopghtybn1234567890";
       "f3" = "kitten hints --program '*'";

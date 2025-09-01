@@ -1,17 +1,12 @@
 {
   lib,
   pkgs,
-  nixGL,
   ...
 }:
 let
   inherit (pkgs.stdenv) isDarwin isLinux;
 in
 {
-  nixGL.packages = import nixGL { inherit pkgs; };
-  nixGL.defaultWrapper = "mesa"; # or the driver you need
-  nixGL.installScripts = [ "mesa" ];
-
   home.packages =
     with pkgs;
     [
