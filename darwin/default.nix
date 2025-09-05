@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   ##########################################################################
   #
   #  Install all apps and packages here.
@@ -9,6 +10,13 @@
   # TODO Fell free to modify this file to fit your needs.
   #
   ##########################################################################
+  imports = [
+    ./nix-core.nix
+    ./system.nix
+    ./host-users.nix
+    ./homebrew.nix
+    ./homebrew-mirror.nix
+  ];
 
   # Install packages from nix's official package repository.
   #
@@ -21,7 +29,10 @@
     git
     just
   ];
-  environment.shells = [pkgs.zsh pkgs.fish];
+  environment.shells = [
+    pkgs.zsh
+    pkgs.fish
+  ];
 
   # TODO To make this work, homebrew need to be installed manually, see https://brew.sh
   #
@@ -69,7 +80,6 @@
       "baidunetdisk"
       "dbeaver-community"
       "docker-desktop"
-      "dotnet-sdk"
       "firefox"
       "free-download-manager"
       "iina"

@@ -1,6 +1,6 @@
 {
   inputs,
-  nixGL,
+  # nixGL,
   outputs,
   ...
 }:
@@ -23,7 +23,7 @@
           hostname
           system
           username
-          nixGL
+          # nixGL
           ;
       };
       modules = [
@@ -80,27 +80,17 @@
       desktop ? "aqua",
       hostname,
       username ? "molisiye",
-      system ? "aarch64-darwin",
+      system ? "x86_64-darwin",
     }:
-    let
-      isISO = false;
-      isInstall = true;
-      isLaptop = true;
-      isWorkstation = true;
-    in
-    inputs.nix-darwin.lib.darwinSystem {
+    inputs.darwin.lib.darwinSystem {
+      inherit system;
       specialArgs = {
         inherit
           inputs
           outputs
           desktop
           hostname
-          system
           username
-          isInstall
-          isISO
-          isLaptop
-          isWorkstation
           ;
       };
       modules = [

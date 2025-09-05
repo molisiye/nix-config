@@ -5,7 +5,7 @@
 {
   home.sessionVariables = {
     EDITOR = "nvim";
-    DOTNET_ROOT = "$HOME/.dotnet";
+    # DOTNET_ROOT = "$HOME/.dotnet";
     # GOOGLE_CLOUD_PROJECT = "$(cat ${config.sops.secrets.google_cloud_project.path})";
   };
 
@@ -13,8 +13,8 @@
     "$HOME/bin"
     "$HOME/.local/bin"
     "$HOME/go/bin"
-    "$HOME/.dotnet"
-    "$HOME/.dotnet/tools"
+    # "$HOME/.dotnet"
+    # "$HOME/.dotnet/tools"
     "/usr/local/sbin"
   ];
 

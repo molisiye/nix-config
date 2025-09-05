@@ -64,7 +64,7 @@ in
 
       # productivity
       yazi
-      dotnet-sdk
+      dotnet-sdk_10
       nh
       # asciicam # Terminal webcam
       # asciinema-agg # Convert asciinema to .gif

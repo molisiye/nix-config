@@ -105,17 +105,24 @@
           system = "x86_64-linux";
         };
       };
-      darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
-        inherit system extraSpecialArgs;
-        modules = [
-          sops-nix.darwinModules.sops
-          ./darwin/nix-core.nix
-          ./darwin/system.nix
-          ./darwin/apps.nix
-          ./darwin/homebrew.nix
-          ./darwin/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
-          ./darwin/host-users.nix
-        ];
+      # darwinConfigurations."${hostname}" = darwin.lib.darwinSystem {
+      #   inherit system extraSpecialArgs;
+      #   modules = [
+      #     sops-nix.darwinModules.sops
+      #     ./darwin/nix-core.nix
+      #     ./darwin/system.nix
+      #     ./darwin/apps.nix
+      #     ./darwin/homebrew.nix
+      #     ./darwin/homebrew-mirror.nix # comment this line if you don't need a homebrew mirror
+      #     ./darwin/host-users.nix
+      #   ];
+      # };
+
+      darwinConfigurations = {
+        "${hostname}" = helper.mkDarwin {
+          username = "molisiye";
+          hostname = "${hostname}";
+        };
       };
 
       devShells = helper.forAllSystems (
