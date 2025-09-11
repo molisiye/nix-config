@@ -6,7 +6,7 @@
   # imports = [ inputs.sops-nix.homeManagerModules.sops ];
   sops = {
     # Point to the age key cloned manually by the user.
-    age.keyFile = config.home.homeDirectory + "/nix-secret/keys.txt";
+    age.keyFile = config.home.homeDirectory + "/nix-secrets/keys.txt";
     # age.keyFile = config.home.homeDirectory + "/.config/sops/age/keys.txt";
 
     defaultSopsFile = ../secrets/secrets.yaml;
