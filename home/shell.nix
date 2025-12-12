@@ -104,6 +104,7 @@
     # --exclude 忽略不想操作的目录
     help = "tldr";
 
+
     # Edit shortcuts for config files
     sshconfig = "${"EDITOR:-vim"} ~/.ssh/config";
     zshrc = "${"EDITOR:-vim"} ~/.zshrc && source ~/.zshrc && echo Zsh config edited and reloaded.";
@@ -136,6 +137,7 @@
     #la = "ls -a";
     #lla = "ls -la";
     #lt = "ls --tree";
+    lta4 = "lsd -lA --tree --depth=4 --icon=always --date relative --size short";
 
     gz = "tar -xzvf";
     tgz = "tar -xzvf";

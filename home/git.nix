@@ -38,7 +38,7 @@
     enable = true;
 
     userName = username;
-    userEmail = config.sops.secrets.useremail.path;
+    userEmail = "(cat ${config.sops.secrets.useremail.path})";
 
     extraConfig = {
       init.defaultBranch = "main";

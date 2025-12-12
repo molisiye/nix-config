@@ -148,11 +148,6 @@ fmt:
   # format the nix files in this repo
   alejandra .
 
-# Check for outdated flake inputs
-[group('nix')]
-check-updates:
-  nvd diff flake.lock
-
 # Show all the auto gc roots in the nix store
 [group('nix')]
 gcroot:

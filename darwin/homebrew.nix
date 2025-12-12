@@ -85,7 +85,6 @@ in
       "another-redis-desktop-manager"
       "baidunetdisk"
       "dbeaver-community"
-      "docker-desktop"
       "firefox"
       "free-download-manager"
       "iina"

@@ -16,7 +16,7 @@ in
       p7zip
 
       # ai
-      gemini-cli
+      # gemini-cli
 
       # language-server
       nil
@@ -64,7 +64,8 @@ in
 
       # productivity
       yazi
-      dotnet-sdk_9
+      dotnet-sdk_10
+      nvd
       nh
       # asciicam # Terminal webcam
       # asciinema-agg # Convert asciinema to .gif
@@ -150,7 +151,8 @@ in
       ffmpeg
       lua
       nginx
-      #node
+      nodejs_20
+      gemini-cli-bin
       #nvm
       prettyping
       pyenv
