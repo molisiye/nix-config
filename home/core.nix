@@ -16,7 +16,7 @@ in
       p7zip
 
       # ai
-      # gemini-cli
+      gemini-cli
 
       # language-server
       nil
@@ -46,6 +46,9 @@ in
       caddy
       gnupg
 
+      # editor
+      neovide
+
       # productivity
 
       fish
@@ -58,7 +61,6 @@ in
       gh
       # utils
       btop
-      thefuck
 
       #aria2 # A lightweight multi-protocol & multi-source command-line download utility
 
@@ -89,7 +91,7 @@ in
       # dotacat # Modern Unix lolcat
       dua # Modern Unix `du`
       duf # Modern Unix `df`
-      du-dust # Modern Unix `du`
+      dust # Modern Unix `du`
       # editorconfig-core-c # EditorConfig Core
       # entr # Modern Unix `watch`
       fastfetch # Modern Unix system info
@@ -152,7 +154,6 @@ in
       lua
       nginx
       nodejs_20
-      gemini-cli-bin
       #nvm
       prettyping
       pyenv
